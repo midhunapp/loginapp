@@ -4,15 +4,19 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { loginRequest } from './loginState';
+import { useSelector,useDispatch } from 'react-redux';
 //import ArrowBackIcon from '@mui/icons-material/ArrowBackIcon';
 //import ArrowBackIcon from '@mui/icons-material/ArrowBackIcon';
 
 
 const Login = () => {
+    const userid=useSelector(state=>state.login.userid);
+    const dispatch=useDispatch();
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123'
+      email: 'admin@gmail.com',
+      password: 'admin'
     },
     validationSchema: Yup.object({
       email: Yup
@@ -26,8 +30,7 @@ const Login = () => {
         .required('Password is required')
     }),
     onSubmit: () => {
-      alert('hi')
-     
+      dispatch(loginRequest({email:formik.values.email,password:formik.values.password}));
     }
   });
 
@@ -45,7 +48,7 @@ const Login = () => {
       >
         <Container maxWidth="sm">
          
-          <form >
+          <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography
                 color="textPrimary"
@@ -86,7 +89,8 @@ const Login = () => {
             <Box sx={{ py: 2 }}>
               <Button
                 color="primary"
-                disabled={formik.isSubmitting}
+               // disabled={formik.isSubmitting}
+               //disabled={!(formik.dirty && formik.isValid)}
                 fullWidth
                 size="large"
                 type="submit"
